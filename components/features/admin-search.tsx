@@ -14,7 +14,7 @@ export default function AdminSearch() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      search: "",
+      search: "serch1",
     },
   });
 
