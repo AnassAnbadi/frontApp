@@ -4,19 +4,15 @@ import { EntityCrud } from '@/components/entity-crud'
 interface Student {
   id: number
   name: string
-  prenom: string
-  filliere: number
-  sem: number
-  note: number
+  email: string
 }
 
 const columns = [
   { key: 'name', label: 'Name' },
-  { key: 'prenom', label: 'prenom' },
-
+  { key: 'email', label: 'Email' },
 ]
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/etudiants'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api'
 
 export default function StudentsPage() {
   const fetchStudents = () => fetch(`${API_URL}/students`).then(res => res.json())
