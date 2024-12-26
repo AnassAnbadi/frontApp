@@ -1,5 +1,15 @@
 import Link from "next/link";
-import { Bell, CircleUser, Home, LineChart, Menu, Package, Package2, ShoppingCart, Users } from 'lucide-react';
+import {
+  Bell,
+  CircleUser,
+  Home,
+  LineChart,
+  Menu,
+  Package,
+  Package2,
+  ShoppingCart,
+  Users,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -28,35 +38,35 @@ export function Sidebar() {
         <div className="flex-1">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
             <Link
-              href="/"
+              href="/adminspace/"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
             >
               <Home className="h-4 w-4" />
               Home
             </Link>
             <Link
-              href="/professors"
+              href="/adminspace/professors"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
             >
               <Users className="h-4 w-4" />
               Professors
             </Link>
             <Link
-              href="/departments"
+              href="/adminspace/departments"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
             >
               <Package className="h-4 w-4" />
               Departments
             </Link>
             <Link
-              href="/modules"
+              href="/adminspace/modules"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
             >
               <ShoppingCart className="h-4 w-4" />
               Modules
             </Link>
             <Link
-              href="/evaluation-methods"
+              href="/adminspace/evaluation-methods"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
             >
               <LineChart className="h-4 w-4" />
@@ -86,4 +96,3 @@ export function Sidebar() {
     </div>
   );
 }
-
