@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import {
   ElementForProf,
+  ProfessorLogin,
   Column,
 } from "@/components/prof_space_components/Crud_backend/DataTypes/Entity";
 import { fetchelementforProf } from "@/components/prof_space_components/Crud_backend/api_amplimentation/element_api";
@@ -26,6 +27,21 @@ const columns: Column<ElementForProf>[] = [
 ];
 
 export default function ElementsPage() {
+  const [profData, setProfData] = useState<ProfessorLogin | null>(null);
+  useEffect(() => {
+    const storedProfData = sessionStorage.getItem("profData");
+    console.log("Stored Prof Data:", storedProfData); // Logs the raw session storage value
+    if (storedProfData) {
+      setProfData(JSON.parse(storedProfData));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (profData) {
+      console.log("Updated Prof Data:", profData); // Logs the updated profData
+    }
+  }, [profData]);
+
   const [elements, setElements] = useState<ElementForProf[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -36,9 +52,11 @@ export default function ElementsPage() {
 
   useEffect(() => {
     const loadElements = async () => {
+      if (!profData) return; // Ensure profData is available
+      console.log("Loading elements for profData:", profData);
       setIsLoading(true);
       try {
-        const data = await fetchelementforProf(1); // Replace 1 with the actual professor ID
+        const data = await fetchelementforProf(profData.id);
         setElements(data);
       } catch (error) {
         console.error("Error fetching elements:", error);
@@ -47,7 +65,8 @@ export default function ElementsPage() {
       }
     };
     loadElements();
-  }, []);
+  }, [profData]); // Runs when profData changes
+  
 
   const handleManageGrade = async (id: keyof ElementForProf) => {
     // Handle manage grade logic

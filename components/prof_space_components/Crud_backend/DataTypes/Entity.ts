@@ -8,6 +8,14 @@ export interface Professor {
   specialite: string;
 }
 
+export interface ProfessorLogin {
+  id: number;
+  nom: string;
+  prenom: string;
+  nomUtilisateur: string;
+  image: string;
+  specialite: string;
+}
 
 
 export interface Module {
