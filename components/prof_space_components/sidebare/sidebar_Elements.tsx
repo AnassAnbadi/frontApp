@@ -1,15 +1,5 @@
 import Link from "next/link";
-import {
-  Bell,
-  CircleUser,
-  Home,
-  LineChart,
-  Menu,
-  Package,
-  Package2,
-  ShoppingCart,
-  Users,
-} from "lucide-react";
+import { Bell, CircleUser, Package2, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -19,7 +9,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ModeToggle } from "./mode-toggle";
 
 export function Sidebar() {
   return (
@@ -28,7 +17,7 @@ export function Sidebar() {
         <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
           <Link href="/" className="flex items-center gap-2 font-semibold">
             <Package2 className="h-6 w-6" />
-            <span className="">Admin Dashboard</span>
+            <span className="">Prof Space</span>
           </Link>
           <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
             <Bell className="h-4 w-4" />
@@ -38,39 +27,11 @@ export function Sidebar() {
         <div className="flex-1">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
             <Link
-              href="/adminspace/"
+              href="/professor/modules"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
             >
-              <Home className="h-4 w-4" />
-              Home
-            </Link>
-            <Link
-              href="/adminspace/professors"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <Users className="h-4 w-4" />
-              Professors
-            </Link>
-            <Link
-              href="/adminspace/departments"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <Package className="h-4 w-4" />
-              Departments
-            </Link>
-            <Link
-              href="/adminspace/modules"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <ShoppingCart className="h-4 w-4" />
-              Modules
-            </Link>
-            <Link
-              href="/adminspace/evaluation-methods"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <LineChart className="h-4 w-4" />
-              Evaluation Methods
+              <BookOpen className="h-4 w-4" />
+              Modules enseignés
             </Link>
           </nav>
         </div>

@@ -1,61 +1,29 @@
-import Link from 'next/link'
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import Link from "next/link";
+
+const adminData = JSON.stringify({ id: 1, name: "Admin User", role: "admin" });
+const profData = JSON.stringify({
+  id: 2,
+  name: "Professor User",
+  role: "professor",
+});
 
 export default function Home() {
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Link href="/professors">
-          <Card>
-            <CardHeader>
-              <CardTitle>Professors</CardTitle>
-            </CardHeader>
-            <CardContent>Manage professor information</CardContent>
-          </Card>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <h1 className="text-4xl font-bold mb-8">Welcome to the Dashboard</h1>
+      <p className="text-lg mb-6">Please choose your space:</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <Link href={{ pathname: "/adminspace", query: { data: adminData } }}>
+          <button className="px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600">
+            Admin Space
+          </button>
         </Link>
-        <Link href="/departments">
-          <Card>
-            <CardHeader>
-              <CardTitle>Departments</CardTitle>
-            </CardHeader>
-            <CardContent>Manage department information</CardContent>
-          </Card>
-        </Link>
-        <Link href="/modules">
-          <Card>
-            <CardHeader>
-              <CardTitle>Modules</CardTitle>
-            </CardHeader>
-            <CardContent>Manage modules and their elements</CardContent>
-          </Card>
-        </Link>
-        <Link href="/evaluation-methods">
-          <Card>
-            <CardHeader>
-              <CardTitle>Evaluation Methods</CardTitle>
-            </CardHeader>
-            <CardContent>Manage evaluation methods</CardContent>
-          </Card>
-        </Link>
-        <Link href="/assignments">
-          <Card>
-            <CardHeader>
-              <CardTitle>Assignments</CardTitle>
-            </CardHeader>
-            <CardContent>Manage element assignments to professors</CardContent>
-          </Card>
-        </Link>
-        <Link href="/users">
-          <Card>
-            <CardHeader>
-              <CardTitle>User Accounts</CardTitle>
-            </CardHeader>
-            <CardContent>Manage user accounts and permissions</CardContent>
-          </Card>
+        <Link href={{ pathname: "/profspace", query: { data: profData } }}>
+          <button className="px-6 py-3 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600">
+            Professor Space
+          </button>
         </Link>
       </div>
     </div>
-  )
+  );
 }
-
