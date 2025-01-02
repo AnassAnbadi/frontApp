@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { EntityCrud } from "@/components/EntityCrud";
-import { ProfessorForm } from "@/components/ProfessorForm";
+import { SemestreForm } from "@/components/SemestreForm";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,49 +11,44 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Professor, Column } from "@/types";
+import { Semestre } from "@/types";
 import {
-  fetchProfessors,
-  createProfessor,
-  updateProfessor,
-  deleteProfessor,
-} from "@/utils/api";
+  fetchSemestres,
+  createSemestre,
+  updateSemestre,
+  deleteSemestre,
+} from "@/utils/SemestreAPI";
 
-const columns: { header: string; accessorKey: keyof Professor }[] = [
+const columns: { header: string; accessorKey: keyof Semestre }[] = [
   { header: "id", accessorKey: "id" },
-  { header: "Nom", accessorKey: "nom" },
-  { header: "Prénom", accessorKey: "prenom" },
-  { header: "username", accessorKey: "username" },
-  { header: "Spécialité", accessorKey: "specialite" },
+  { header: "Nom du Semestre", accessorKey: "nom" },
 ];
 
-export default function ProfessorsPage() {
-  const [professors, setProfessors] = useState<Professor[]>([]);
+export default function SemestresPage() {
+  const [semestres, setSemestres] = useState<Semestre[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [currentProfessor, setCurrentProfessor] = useState<Partial<Professor>>(
-    {}
-  );
+  const [currentSemestre, setCurrentSemestre] = useState<Partial<Semestre>>({});
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    const loadProfessors = async () => {
+    const loadSemestres = async () => {
       setIsLoading(true);
       try {
-        const data = await fetchProfessors();
-        setProfessors(data);
+        const data = await fetchSemestres();
+        setSemestres(data);
       } catch (error) {
-        console.error("Error fetching professors:", error);
+        console.error("Error fetching semestres:", error);
       } finally {
         setIsLoading(false);
       }
     };
-    loadProfessors();
+    loadSemestres();
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrentProfessor({
-      ...currentProfessor,
+    setCurrentSemestre({
+      ...currentSemestre,
       [e.target.name]: e.target.value,
     });
   };
@@ -61,66 +56,67 @@ export default function ProfessorsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isEditing) {
-      const updatedProfessor = await updateProfessor(
-        currentProfessor.id!,
-        currentProfessor
+      const updatedSemestre = await updateSemestre(
+        currentSemestre.id!,
+        currentSemestre
       );
-      setProfessors(
-        professors.map((p) =>
-          p.id === updatedProfessor.id ? updatedProfessor : p
+      setSemestres(
+        semestres.map((s) =>
+          s.id === updatedSemestre.id ? updatedSemestre : s
         )
       );
     } else {
-      const newProfessor = await createProfessor(currentProfessor);
-      setProfessors([...professors, newProfessor]);
+      const newSemestre = await createSemestre(currentSemestre);
+      console.log(newSemestre,"anass")
+      setSemestres([...semestres, newSemestre]);
     }
     setIsDialogOpen(false);
-    setCurrentProfessor({});
+    setCurrentSemestre({});
     setIsEditing(false);
   };
 
-  const handleEdit = (professor: Professor) => {
-    setCurrentProfessor(professor);
+  const handleEdit = (semestre: Semestre) => {
+    setCurrentSemestre(semestre);
     setIsEditing(true);
     setIsDialogOpen(true);
   };
 
-  const handleDelete = async (id: keyof Professor) => {
-    await deleteProfessor(Number(id));
-    setProfessors(professors.filter((p) => p.id !== Number(id)));
+  const handleDelete = async (id: keyof Semestre) => {
+    await deleteSemestre(Number(id));
+    setSemestres(semestres.filter((s) => s.id !== Number(id)));
   };
 
   if (isLoading) {
-    return <div>Chargement des professeurs...</div>;
+    return <div>Chargement des semestres...</div>;
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
-          Professeurs
+          Semestres
         </h1>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button
               onClick={() => {
                 setIsEditing(false);
-                setCurrentProfessor({});
+                setCurrentSemestre({});
               }}
             >
-              Ajouter un professeur
+              Ajouter un semestre
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
                 {isEditing
-                  ? "Modifier le professeur"
-                  : "Ajouter un nouveau professeur"}
+                  ? "Modifier le semestre"
+                  : "Ajouter un nouveau semestre"}
               </DialogTitle>
             </DialogHeader>
-            <ProfessorForm
-              professor={currentProfessor}
+            <SemestreForm
+              semestre={currentSemestre}
               isEditing={isEditing}
               onInputChange={handleInputChange}
               onSubmit={handleSubmit}
@@ -128,10 +124,10 @@ export default function ProfessorsPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <EntityCrud<Professor>
-        entityName="Professeurs"
+      <EntityCrud<Semestre>
+        entityName="Semestres"
         columns={columns}
-        items={professors}
+        items={semestres}
         onEdit={handleEdit}
         onDelete={handleDelete}
         primaryKey="id"

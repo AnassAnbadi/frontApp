@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { EntityCrud } from "@/components/EntityCrud";
-import { ProfessorForm } from "@/components/ProfessorForm";
+import { FiliereForm } from "@/components/FiliereForm";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,49 +11,44 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Professor, Column } from "@/types";
+import { Filiere } from "@/types";
 import {
-  fetchProfessors,
-  createProfessor,
-  updateProfessor,
-  deleteProfessor,
-} from "@/utils/api";
+  fetchFilieres,
+  createFiliere,
+  updateFiliere,
+  deleteFiliere,
+} from "@/utils/filiereAPI";
 
-const columns: { header: string; accessorKey: keyof Professor }[] = [
+const columns: { header: string; accessorKey: keyof Filiere }[] = [
   { header: "id", accessorKey: "id" },
-  { header: "Nom", accessorKey: "nom" },
-  { header: "Prénom", accessorKey: "prenom" },
-  { header: "username", accessorKey: "username" },
-  { header: "Spécialité", accessorKey: "specialite" },
+  { header: "Nom de la Filière", accessorKey: "nomFiliere" },
 ];
 
-export default function ProfessorsPage() {
-  const [professors, setProfessors] = useState<Professor[]>([]);
+export default function FilieresPage() {
+  const [filieres, setFilieres] = useState<Filiere[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [currentProfessor, setCurrentProfessor] = useState<Partial<Professor>>(
-    {}
-  );
+  const [currentFiliere, setCurrentFiliere] = useState<Partial<Filiere>>({});
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    const loadProfessors = async () => {
+    const loadFilieres = async () => {
       setIsLoading(true);
       try {
-        const data = await fetchProfessors();
-        setProfessors(data);
+        const data = await fetchFilieres();
+        setFilieres(data);
       } catch (error) {
-        console.error("Error fetching professors:", error);
+        console.error("Error fetching filieres:", error);
       } finally {
         setIsLoading(false);
       }
     };
-    loadProfessors();
+    loadFilieres();
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrentProfessor({
-      ...currentProfessor,
+    setCurrentFiliere({
+      ...currentFiliere,
       [e.target.name]: e.target.value,
     });
   };
@@ -61,66 +56,63 @@ export default function ProfessorsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isEditing) {
-      const updatedProfessor = await updateProfessor(
-        currentProfessor.id!,
-        currentProfessor
-      );
-      setProfessors(
-        professors.map((p) =>
-          p.id === updatedProfessor.id ? updatedProfessor : p
+      const updatedFiliere = await updateFiliere(currentFiliere.id!, currentFiliere);
+      setFilieres(
+        filieres.map((f) =>
+          f.id === updatedFiliere.id ? updatedFiliere : f
         )
       );
     } else {
-      const newProfessor = await createProfessor(currentProfessor);
-      setProfessors([...professors, newProfessor]);
+      const newFiliere = await createFiliere(currentFiliere);
+      setFilieres([...filieres, newFiliere]);
     }
     setIsDialogOpen(false);
-    setCurrentProfessor({});
+    setCurrentFiliere({});
     setIsEditing(false);
   };
 
-  const handleEdit = (professor: Professor) => {
-    setCurrentProfessor(professor);
+  const handleEdit = (filiere: Filiere) => {
+    setCurrentFiliere(filiere);
     setIsEditing(true);
     setIsDialogOpen(true);
   };
 
-  const handleDelete = async (id: keyof Professor) => {
-    await deleteProfessor(Number(id));
-    setProfessors(professors.filter((p) => p.id !== Number(id)));
+  const handleDelete = async (id: keyof Filiere) => {
+    await deleteFiliere(Number(id));
+    setFilieres(filieres.filter((f) => f.id !== Number(id)));
   };
 
   if (isLoading) {
-    return <div>Chargement des professeurs...</div>;
+    return <div>Chargement des filières...</div>;
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
-          Professeurs
+          Filières
         </h1>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button
               onClick={() => {
                 setIsEditing(false);
-                setCurrentProfessor({});
+                setCurrentFiliere({});
               }}
             >
-              Ajouter un professeur
+              Ajouter une filière
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
                 {isEditing
-                  ? "Modifier le professeur"
-                  : "Ajouter un nouveau professeur"}
+                  ? "Modifier la filière"
+                  : "Ajouter une nouvelle filière"}
               </DialogTitle>
             </DialogHeader>
-            <ProfessorForm
-              professor={currentProfessor}
+            <FiliereForm
+              filiere={currentFiliere}
               isEditing={isEditing}
               onInputChange={handleInputChange}
               onSubmit={handleSubmit}
@@ -128,10 +120,10 @@ export default function ProfessorsPage() {
           </DialogContent>
         </Dialog>
       </div>
-      <EntityCrud<Professor>
-        entityName="Professeurs"
+      <EntityCrud<Filiere>
+        entityName="Filières"
         columns={columns}
-        items={professors}
+        items={filieres}
         onEdit={handleEdit}
         onDelete={handleDelete}
         primaryKey="id"

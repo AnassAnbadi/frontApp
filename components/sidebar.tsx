@@ -59,6 +59,27 @@ export function Sidebar() {
               Departments
             </Link>
             <Link
+              href="/adminspace/filieres"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+            >
+              <Package className="h-4 w-4" />
+              Filieres
+            </Link>
+            <Link
+              href="/adminspace/Semestre"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+            >
+              <Package className="h-4 w-4" />
+              Semestres
+            </Link>
+            <Link
+              href="/adminspace/Etudiant"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+            >
+              <Package className="h-4 w-4" />
+              Etudiants
+            </Link>
+            <Link
               href="/adminspace/modules"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
             >
