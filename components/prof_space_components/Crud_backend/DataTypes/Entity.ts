@@ -40,16 +40,34 @@ export interface Element {
   coefficient: number;
   module: Module;
   professeur: Professor;
-  notes: NoteElement[];
 }
 
 export interface Etudiant {
-  id: number;
+  id: string;
   nomEtudiant: string;
   prenomEtudiant: string;
-  filiere: Filiere;
-  semestre: Semestre;
-  notes: NoteElement[];
+  filiere: string;
+  semestre: string;
+}
+
+export type Student = {
+  id: number;
+  name: string;
+  lastName: string;
+  grade: number | null;
+  absent: boolean;
+};
+
+export interface Note {
+  noteElement:string;
+  absent:string;
+  element:{id:string};
+  modalite:{id:string};
+  etudiant:{id:string};
+}
+
+export interface NoteForPost{
+  Notes:Note[];
 }
 
 export interface Filiere {
@@ -60,10 +78,31 @@ export interface Filiere {
 }
 
 export interface ModaliteEvaluation {
-  id: number;
   typeModalite: string;
-  coefficient: number;
-  notes: NoteElement[];
+  coefficient: string;
+  isvalidate: boolean;
+}
+
+export interface ModaliteEvaluationPost {
+  typeModalite: string;
+  coefficient: string;
+  isvalidate: boolean;
+};
+
+export interface ModeEvaluation{
+  initialField:string;
+  modalites: ModaliteEvaluationPost[],
+}
+
+export interface ModaliteEvaluationForElement {
+  id: number;               
+  coefficient: number;      
+  typeModalite: string; 
+  isvalidate:boolean;    
+  nomElement: string;       
+  nomModule: string;        
+  nomFiliere: string;       
+  nomSemestre: string;      
 }
 
 export interface Semestre {

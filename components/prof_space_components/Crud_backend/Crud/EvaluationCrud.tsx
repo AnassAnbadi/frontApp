@@ -7,7 +7,7 @@ interface EntityCrudProps<T> {
   entityName: string;
   columns: Column<T>[];
   items: T[];
-  onShowDetaile: (id: keyof T) => Promise<void>;
+  onShowDetaile: (id: keyof T, isvalid: keyof T) => Promise<void>;
   primaryKey: keyof T;
 }
 
@@ -20,19 +20,19 @@ export function EntityCrud<T extends { [key: string]: any }>({
 }: EntityCrudProps<T>) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-      <table className="w-full">
+      <table className="table-auto w-full">
         <thead className="bg-gray-50 dark:bg-gray-700">
           <tr>
             {columns.map((col) => (
               <th
                 key={col.accessorKey as string}
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider break-words"
               >
                 {col.header}
               </th>
             ))}
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-              Actions
+            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+              Show
             </th>
           </tr>
         </thead>
@@ -48,18 +48,19 @@ export function EntityCrud<T extends { [key: string]: any }>({
               {columns.map((col) => (
                 <td
                   key={col.accessorKey as string}
-                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300"
+                  className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 break-words"
                 >
                   {item[col.accessorKey]}
                 </td>
               ))}
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+              <td className="px-4 py-2 text-sm font-medium">
                 <Button
                   variant="outline"
-                  className="mr-2"
-                  onClick={() => onShowDetaile(item[primaryKey])}
+                  onClick={() =>
+                    onShowDetaile(item[primaryKey], item.isvalidate)
+                  }
                 >
-                  Show Elements
+                  Show grades
                 </Button>
               </td>
             </motion.tr>

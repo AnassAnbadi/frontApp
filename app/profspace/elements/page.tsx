@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { EntityCrud } from "@/components/prof_space_components/Crud_backend/Crud/elemenCrud";
 import { Button } from "@/components/ui/button";
@@ -49,7 +50,7 @@ export default function ElementsPage() {
     {}
   );
   const [isEditing, setIsEditing] = useState(false);
-
+  const router = useRouter();
   useEffect(() => {
     const loadElements = async () => {
       if (!profData) return; // Ensure profData is available
@@ -66,11 +67,11 @@ export default function ElementsPage() {
     };
     loadElements();
   }, [profData]); // Runs when profData changes
-  
 
   const handleManageGrade = async (id: keyof ElementForProf) => {
-    // Handle manage grade logic
-    console.log("Manage grade for element ID:", id);
+    sessionStorage.setItem("currentElement", id.toString());
+    console.log("Manage grade for Elemet:", id);
+    router.push("/profspace/Evaluation");
   };
 
   if (isLoading) {
@@ -83,7 +84,6 @@ export default function ElementsPage() {
         <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
           Elements
         </h1>
-        <Button onClick={() => setIsDialogOpen(true)}>Add Element</Button>
       </div>
       <EntityCrud<ElementForProf>
         entityName="Elements"

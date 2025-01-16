@@ -16,7 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ModeToggle } from "./prof_space_components/mode-toggle";
+import { ModeToggle } from "@/components/mode-toggle";
 export function Sidebar() {
   return (
     <div className="hidden border-r bg-muted/40 md:block fixed h-full w-[280px]">
