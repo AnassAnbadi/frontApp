@@ -20,7 +20,13 @@ export interface Etudiant {
   nomEtudiant: string;
   prenomEtudiant: string;
   nomFiliere: string;
-  nom: string;
+  nomSemestre: string;
+}
+export interface Module {
+  id: number;
+  nomModule: string;
+  filiere: Filiere;
+  semestre: Semestre;
 }
 
 export interface Column<T> {

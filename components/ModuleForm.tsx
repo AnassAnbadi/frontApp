@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Etudiant, Filiere, Semestre } from "@/types";
+import { Module, Filiere, Semestre } from "@/types";
 import { fetchFilieres } from "@/utils/filiereAPI";
 import { fetchSemestres } from "@/utils/SemestreAPI";
 import * as React from "react";
@@ -16,29 +16,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface EtudiantFormProps {
-  etudiant: Partial<Etudiant>;
+interface ModuleFormProps {
+  module: Partial<Module>;
   isEditing: boolean;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSelectChange: (e: React.ChangeEvent<HTMLSelectElement>, type: string) => void;
+  onSelectChange: (type: string, value: Filiere | Semestre) => void;
   onSubmit: (e: React.FormEvent) => void;
 }
 
-export function EtudiantForm({
-  etudiant,
+export function ModuleForm({
+  module,
   isEditing,
   onInputChange,
   onSelectChange,
   onSubmit,
-}: EtudiantFormProps) {
+}: ModuleFormProps) {
   const [filieres, setFilieres] = useState<Filiere[]>([]);
   const [semestres, setSemestres] = useState<Semestre[]>([]);
-  const [selectedFiliere, setSelectedFiliere] = useState<string | undefined>(
-    etudiant.nomFiliere
-  );
-  const [selectedSemestre, setSelectedSemestre] = useState<string | undefined>(
-    etudiant.nomSemestre
-  );
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -71,28 +65,6 @@ export function EtudiantForm({
     loadData();
   }, []);
 
-  const handleFiliereChange = (value: string) => {
-    setSelectedFiliere(value);
-    const fakeEvent = {
-      target: {
-        name: "nomFiliere",
-        value: value,
-      },
-    } as React.ChangeEvent<HTMLSelectElement>;
-    onSelectChange(fakeEvent, "filiere");
-  };
-
-  const handleSemestreChange = (value: string) => {
-    setSelectedSemestre(value);
-    const fakeEvent = {
-      target: {
-        name: "nom",
-        value: value,
-      },
-    } as React.ChangeEvent<HTMLSelectElement>;
-    onSelectChange(fakeEvent, "semestre");
-  };
-
   if (error) {
     return <div className="text-red-500">{error}</div>;
   }
@@ -100,30 +72,26 @@ export function EtudiantForm({
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <div>
-        <Label htmlFor="nomEtudiant">Nom</Label>
+        <Label htmlFor="nomModule">Nom du Module</Label>
         <Input
-          id="nomEtudiant"
-          name="nomEtudiant"
-          value={etudiant.nomEtudiant || ""}
+          id="nomModule"
+          name="nomModule"
+          value={module.nomModule || ""}
           onChange={onInputChange}
           required
         />
       </div>
       <div>
-        <Label htmlFor="prenomEtudiant">Prénom</Label>
-        <Input
-          id="prenomEtudiant"
-          name="prenomEtudiant"
-          value={etudiant.prenomEtudiant || ""}
-          onChange={onInputChange}
-          required
-        />
-      </div>
-      <div>
-        <Label htmlFor="nomFiliere">Filière</Label>
+        <Label htmlFor="filiere">Filière</Label>
         <Select
-          value={selectedFiliere || ""}
-          onValueChange={handleFiliereChange}
+          value={module.filiere?.id.toString()}
+          onValueChange={(value) => {
+            const filiere = filieres.find(f => f.id.toString() === value);
+            if (filiere) {
+              onSelectChange("filiere", filiere);
+              console.log(filiere,"mal hadi katmchi khawya");
+            }
+          }}
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Sélectionner une filière" />
@@ -132,7 +100,7 @@ export function EtudiantForm({
             <SelectGroup>
               <SelectLabel>Filières</SelectLabel>
               {filieres.map((filiere) => (
-                <SelectItem key={filiere.id} value={filiere.nomFiliere}>
+                <SelectItem key={filiere.id} value={filiere.id.toString()}>
                   {filiere.nomFiliere}
                 </SelectItem>
               ))}
@@ -141,10 +109,16 @@ export function EtudiantForm({
         </Select>
       </div>
       <div>
-        <Label htmlFor="nomSemetre">Semestre</Label>
+        <Label htmlFor="semestre">Semestre</Label>
         <Select
-          value={selectedSemestre || ""}
-          onValueChange={handleSemestreChange}
+          value={module.semestre?.id.toString()}
+          onValueChange={(value) => {
+            const semestre = semestres.find(s => s.id.toString() === value);
+            if (semestre) {
+              onSelectChange("semestre", semestre);
+              console.log(semestre,"et pour semestre");
+            }
+          }}
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Sélectionner un semestre" />
@@ -153,7 +127,7 @@ export function EtudiantForm({
             <SelectGroup>
               <SelectLabel>Semestres</SelectLabel>
               {semestres.map((semestre) => (
-                <SelectItem key={semestre.id} value={semestre.nom}>
+                <SelectItem key={semestre.id} value={semestre.id.toString()}>
                   {semestre.nom}
                 </SelectItem>
               ))}

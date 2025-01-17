@@ -6,7 +6,6 @@ export const fetchFilieres = async () => {
   if (!response.ok) {
     throw new Error("Failed to fetch filieres");
   }
-  console.log(response.json,"f");
   return response.json();
 };
 
